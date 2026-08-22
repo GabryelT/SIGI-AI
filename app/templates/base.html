@@ -3,21 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>{% block title %}SIGI-AI{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/styles.css') }}"
+    >
 </head>
+
 <body>
-    <header>
-        <h1>SIGI-AI</h1>
-        <p>Sistema Inteligente de Gestión de Incidentes</p>
+    <a class="skip-link" href="#contenido-principal">
+        Saltar al contenido principal
+    </a>
+
+    <header class="site-header">
+        <div class="container header-content">
+            <div class="site-identity">
+                <h1>
+                    <a href="{{ url_for('incidents.list_incidents') }}">
+                        SIGI-AI
+                    </a>
+                </h1>
+                <p>Sistema Inteligente de Gestión de Incidentes</p>
+            </div>
+
+            <nav class="main-nav" aria-label="Navegación principal">
+                <a href="{{ url_for('incidents.list_incidents') }}">
+                    Consultar incidentes
+                </a>
+                <a href="{{ url_for('incidents.new_incident_form') }}">
+                    Registrar incidente
+                </a>
+            </nav>
+        </div>
     </header>
 
-    <main>
+    <main id="contenido-principal" class="container site-main">
         {% block content %}{% endblock %}
     </main>
 
-    <footer>
-        <p>SIGI-AI &mdash; Gestión de Incidentes de Seguridad</p>
+    <footer class="site-footer">
+        <div class="container">
+            <p>SIGI-AI &mdash; Gestión de Incidentes de Seguridad</p>
+        </div>
     </footer>
 </body>
 </html>

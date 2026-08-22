@@ -6,11 +6,7 @@
 <section class="list-section">
     <h2>Consultar incidentes</h2>
 
-    <nav class="section-nav">
-        <a href="{{ url_for('incidents.list_incidents') }}">Consultar incidentes</a>
-        &mdash;
-        <a href="{{ url_for('incidents.new_incident_form') }}">Registrar incidente</a>
-    </nav>
+
 
     {# Error por filtro inválido #}
     {% if error %}
@@ -88,7 +84,13 @@
 
     {# Tabla de incidentes #}
     {% if incidents %}
-    <table class="incidents-table">
+<div
+    class="table-wrapper"
+    role="region"
+    aria-label="Listado de incidentes"
+    tabindex="0"
+>
+<table class="incidents-table">
         <thead>
             <tr>
                 <th scope="col">ID</th>
@@ -110,15 +112,27 @@
                 <td>{{ incident.description }}</td>
                 <td>{{ incident.location }}</td>
                 <td>{{ incident.incident_date }}</td>
-                <td>{{ incident.created_at }}</td>
+            <td>
+    <time datetime="{{ incident.created_at }}">
+        {{ incident.created_at[:19] | replace("T", " ") }}
+    </time>
+</td>
                 <td>{{ incident.category }}</td>
-                <td>{{ incident.priority }}</td>
+
+<td>
+    <span class="priority-badge priority-{{ incident.priority|lower }}">
+        {{ incident.priority }}
+    </span>
+</td>
+
                 <td>{{ incident.classification_explanation }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    </div>
     {% endif %}
+
 
 </section>
 {% endblock %}

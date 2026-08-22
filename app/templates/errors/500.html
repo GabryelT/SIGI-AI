@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Error interno &mdash; SIGI-AI{% endblock %}
+
+{% block content %}
+<section class="error-page" aria-labelledby="error-title">
+    <p class="error-code">500</p>
+    <h2 id="error-title">Ocurrió un error interno</h2>
+    <p>No fue posible completar la solicitud. Inténtalo nuevamente.</p>
+    <a class="button-link" href="{{ url_for('incidents.list_incidents') }}">
+        Volver al listado de incidentes
+    </a>
+</section>
+{% endblock %}

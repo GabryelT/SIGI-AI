@@ -4,7 +4,7 @@ Centraliza toda la validación de los campos obligatorios.
 Acumula todos los errores antes de retornar para que el usuario
 vea de una sola vez qué campos requieren corrección.
 """
-
+import re
 from datetime import datetime
 
 
@@ -44,13 +44,21 @@ def validate_incident_data(data: dict) -> tuple[bool, list[str]]:
             "(por ejemplo: 2025-07-15)."
         )
     else:
-        try:
-            datetime.strptime(incident_date.strip(), "%Y-%m-%d")
-        except ValueError:
+        date_value = incident_date.strip()
+
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date_value):
             errors.append(
                 "La fecha debe tener el formato AAAA-MM-DD "
                 "(por ejemplo: 2025-07-15)."
             )
+        else:
+            try:
+                datetime.strptime(date_value, "%Y-%m-%d")
+            except ValueError:
+                errors.append(
+                    "La fecha debe tener el formato AAAA-MM-DD "
+                    "(por ejemplo: 2025-07-15)."
+                )
 
     if errors:
         return (False, errors)

@@ -74,3 +74,39 @@ class IncidentService:
         incident_id = repository.save(incident)
 
         return {"success": True, "id": incident_id}
+
+    def get_incidents(
+        self,
+        category: str | None = None,
+        priority: str | None = None,
+    ) -> dict:
+        """Retorna los incidentes, aplicando filtros opcionales.
+
+        Delega completamente en ``IncidentRepository.find_all()``.
+
+        Args:
+            category: Categoría por la que filtrar, o ``None``.
+            priority: Prioridad por la que filtrar, o ``None``.
+
+        Returns:
+            - ``{"incidents": list, "message": None}`` si hay resultados.
+            - ``{"incidents": [], "message": str}`` si no hay resultados
+              (el mensaje indica si se usaron filtros o no).
+            - ``{"error": str}`` si los filtros tienen valores inválidos.
+        """
+        has_filters = category is not None or priority is not None
+
+        repository = IncidentRepository()
+        try:
+            incidents = repository.find_all(category=category, priority=priority)
+        except ValueError as exc:
+            return {"error": str(exc)}
+
+        if not incidents:
+            if has_filters:
+                message = "No se encontraron incidentes con los criterios seleccionados."
+            else:
+                message = "No hay incidentes registrados."
+            return {"incidents": [], "message": message}
+
+        return {"incidents": incidents, "message": None}

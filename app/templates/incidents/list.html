@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Consultar incidentes &mdash; SIGI-AI{% endblock %}
+
+{% block content %}
+<section class="list-section">
+    <h2>Consultar incidentes</h2>
+
+    <nav class="section-nav">
+        <a href="{{ url_for('incidents.list_incidents') }}">Consultar incidentes</a>
+        &mdash;
+        <a href="{{ url_for('incidents.new_incident_form') }}">Registrar incidente</a>
+    </nav>
+
+    {# Error por filtro inválido #}
+    {% if error %}
+    <div class="alert alert-error" role="alert">
+        <strong>Error en los filtros:</strong> {{ error }}
+    </div>
+    {% endif %}
+
+    {# Formulario de filtros #}
+    <form method="GET" action="{{ url_for('incidents.list_incidents') }}" class="filter-form">
+        <div class="form-group">
+            <label for="category">Categoría</label>
+            <select id="category" name="category">
+                <option value="">Todas</option>
+                <option value="Seguridad de la Información"
+                    {% if selected_category == "Seguridad de la Información" %}selected{% endif %}>
+                    Seguridad de la Información
+                </option>
+                <option value="Seguridad Física"
+                    {% if selected_category == "Seguridad Física" %}selected{% endif %}>
+                    Seguridad Física
+                </option>
+                <option value="Hardware"
+                    {% if selected_category == "Hardware" %}selected{% endif %}>
+                    Hardware
+                </option>
+                <option value="Software"
+                    {% if selected_category == "Software" %}selected{% endif %}>
+                    Software
+                </option>
+                <option value="Red/Conectividad"
+                    {% if selected_category == "Red/Conectividad" %}selected{% endif %}>
+                    Red/Conectividad
+                </option>
+                <option value="Cuenta/Usuario"
+                    {% if selected_category == "Cuenta/Usuario" %}selected{% endif %}>
+                    Cuenta/Usuario
+                </option>
+                <option value="Por revisar"
+                    {% if selected_category == "Por revisar" %}selected{% endif %}>
+                    Por revisar
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="priority">Prioridad</label>
+            <select id="priority" name="priority">
+                <option value="">Todas</option>
+                <option value="Baja"
+                    {% if selected_priority == "Baja" %}selected{% endif %}>
+                    Baja
+                </option>
+                <option value="Media"
+                    {% if selected_priority == "Media" %}selected{% endif %}>
+                    Media
+                </option>
+                <option value="Alta"
+                    {% if selected_priority == "Alta" %}selected{% endif %}>
+                    Alta
+                </option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit">Filtrar</button>
+            <a href="{{ url_for('incidents.list_incidents') }}">Limpiar filtros</a>
+        </div>
+    </form>
+
+    {# Mensaje cuando no hay resultados #}
+    {% if message %}
+    <p class="info-message">{{ message }}</p>
+    {% endif %}
+
+    {# Tabla de incidentes #}
+    {% if incidents %}
+    <table class="incidents-table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Título</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Ubicación</th>
+                <th scope="col">Fecha del incidente</th>
+                <th scope="col">Registrado el</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Prioridad</th>
+                <th scope="col">Explicación de clasificación</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for incident in incidents %}
+            <tr>
+                <td>{{ incident.id }}</td>
+                <td>{{ incident.title }}</td>
+                <td>{{ incident.description }}</td>
+                <td>{{ incident.location }}</td>
+                <td>{{ incident.incident_date }}</td>
+                <td>{{ incident.created_at }}</td>
+                <td>{{ incident.category }}</td>
+                <td>{{ incident.priority }}</td>
+                <td>{{ incident.classification_explanation }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+</section>
+{% endblock %}
